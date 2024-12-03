@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Image Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 80vh;
+      border: 2px solid #ddd;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .status {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+<h1>Real-time Image Viewer</h1>
+<img height="500" width="500" id="image" src="img/nolan-erp_vmmag.jpg" alt="Real-time Processed Image">
+<div id="status" class="status">Connecting to WebSocket...</div>
+<img src="http://127.0.0.1:8000/files/caf09b54-09c5-438e-b64c-8715eab7c5e6_0.png" alt="">
+
+<script>
+  // Connect to WebSocket on localhost
+  const socket = new WebSocket('ws://localhost:8000/ws');
+
+  const statusElement = document.getElementById('status');
+
+  // WebSocket events
+  socket.onopen = () => {
+    statusElement.textContent = "Connected to WebSocket.";
+  };
+
+  socket.onerror = (error) => {
+    console.error('WebSocket error:', error);
+    statusElement.textContent = "WebSocket error. Check console for details.";
+    statusElement.style.color = 'red';
+  };
+
+  socket.onclose = () => {
+    statusElement.textContent = "WebSocket connection closed.";
+    statusElement.style.color = 'orange';
+  };
+</script>
+</body>
+</html>
