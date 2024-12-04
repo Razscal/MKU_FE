@@ -1,57 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-time Image Viewer</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
-    }
-    img {
-      max-width: 100%;
-      max-height: 80vh;
-      border: 2px solid #ddd;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .status {
-      margin-top: 20px;
-      font-size: 18px;
-      color: green;
-    }
-  </style>
+  <title>Dự án Miền Ký Ức</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style></style>
 </head>
 <body>
-<h1>Real-time Image Viewer</h1>
-<img height="500" width="500" id="image" src="img/nolan-erp_vmmag.jpg" alt="Real-time Processed Image">
-<div id="status" class="status">Connecting to WebSocket...</div>
-<img src="http://127.0.0.1:8000/files/caf09b54-09c5-438e-b64c-8715eab7c5e6_0.png" alt="">
+<div class="container-fluid">
+  <div class="row">
+    <!-- Left Panel -->
+    <div class="col-6 left-panel">
+      <form id="restoration-form">
+        <!-- Drag & Drop Area -->
+        <div class="drag-drop-area" id="dropZone">
+          <h5>Kéo thả ảnh vào đây hoặc click để chọn ảnh</h5>
+          <input type="file" id="fileInput" hidden accept="image/*">
+        </div>
 
-<script>
-  // Connect to WebSocket on localhost
-  const socket = new WebSocket('ws://localhost:8000/ws');
+        <!-- Preview Image -->
+        <div id="previewContainer" style="display: none;">
+          <img id="previewImage" class="preview-image" src="" alt="Preview">
+        </div>
 
-  const statusElement = document.getElementById('status');
+        <!-- Settings Area -->
+        <div class="settings-area mt-4">
+          <!-- Example Input -->
+          <div class="form-group">
+            <label for="imageTitle">Prompt Controlnet</label>
+            <input type="text" class="form-control" id="imageTitle">
+          </div>
+          <div class="form-group">
+            <label for="imageTitle1">Prompt GAN</label>
+            <input type="text" class="form-control" id="imageTitle1">
+          </div>
 
-  // WebSocket events
-  socket.onopen = () => {
-    statusElement.textContent = "Connected to WebSocket.";
-  };
+          <!-- Submit Button -->
+          <button id="runProcess" type="submit" class="btn btn-primary w-100 mt-4">PHỤC CHẾ</button>
+        </div>
+      </form>
+    </div>
 
-  socket.onerror = (error) => {
-    console.error('WebSocket error:', error);
-    statusElement.textContent = "WebSocket error. Check console for details.";
-    statusElement.style.color = 'red';
-  };
+    <!-- Right Panel -->
+    <div class="col-6 right-panel">
+      <!-- Processing Steps -->
+      <div id="processing-steps" class="">
 
-  socket.onclose = () => {
-    statusElement.textContent = "WebSocket connection closed.";
-    statusElement.style.color = 'orange';
-  };
+        <!-- Download Button -->
+        <a href="#" class="btn btn-success w-100 mb-4">TẢI VỀ KẾT QUẢ</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js">
 </script>
 </body>
 </html>

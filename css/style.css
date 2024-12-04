@@ -10,6 +10,62 @@
 /* ==========================================================================
    Base styles: opinionated defaults
    ========================================================================== */
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.drag-drop-area:hover {
+  border-color: #0d6efd;
+  background-color: #e9ecef;
+}
+
+.drag-drop-area.dragover {
+  border-color: #198754;
+  background-color: #e8f4ea;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+  margin: 15px 0;
+  border-radius: 8px;
+}
+
+.left-panel {
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.right-panel {
+  margin-left: 50%;
+  padding: 20px;
+}
+
+.step-result {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.step-result img {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
 
 html {
   color: #222;
