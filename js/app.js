@@ -101,25 +101,10 @@ document.getElementById("runProcess").addEventListener("click", async() => {
     const stepDiv = document.createElement("div");
     stepDiv.className = "step-result";
 
-    if (step.step === 4) {
-      // Special case for step 4 with two images
-      stepDiv.innerHTML = `
-                <h5>${step.title}</h5>
-                <div class="row">
-                    <div class="col-6">
-                        <img src="http://127.0.0.1:8000/files/${id}_4_1.png" alt="Step 4 result 1" class="img-fluid">
-                    </div>
-                    <div class="col-6">
-                        <img src="http://127.0.0.1:8000/files/${id}_4_2.png" alt="Step 4 result 2" class="img-fluid">
-                    </div>
-                </div>
-            `;
-    } else {
       stepDiv.innerHTML = `
                 <h5>${step.title}</h5>
                 <img src="http://127.0.0.1:8000/files/${id}_${step.step}.png" alt="Step ${step.step} result" class="img-fluid">
             `;
-    }
     try{
       stepsContainer.appendChild(stepDiv);
     }
