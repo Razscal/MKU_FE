@@ -67,8 +67,11 @@ socket.onclose = () => {
 
 // Call api
 
-document.getElementById("runProcess").addEventListener("click", async() => {
-  console.log("click!")
+let id = ''; // Declare id globally to store the id received after upload
+
+document.getElementById("runProcess").addEventListener("click", async () => {
+  console.log("click!");
+
   const fileInput = document.getElementById("fileInput");
   const status = document.getElementById("status");
 
@@ -76,43 +79,70 @@ document.getElementById("runProcess").addEventListener("click", async() => {
   const formData = new FormData();
   formData.append("upload_file", fileInput.files[0]);
 
-  // Call the FastAPI endpoint
+  // Call the FastAPI upload endpoint
   const response = await fetch("http://127.0.0.1:8000/file/upload", {
     method: "POST",
     body: formData,
   });
 
-  const data = await response.json();
-  const id = data.id
-  // Render
+  if (response.ok) {
+    const data = await response.json();
+    id = data.id;  // Store the id from the upload response
 
-  stepsContainer = document.getElementById("processing-steps");
+    console.log("Upload successful, ID:", id);
 
-  const steps = [
-    { title: "Bước 1: Phân tích ảnh", step: 1 },
-    { title: "Bước 2: Loại bỏ nhiễu", step: 2 },
-    { title: "Bước 3: Tăng cường chi tiết", step: 3 },
-    { title: "Bước 4: Tô màu", step: 4 },
-    { title: "Bước 5: Tối ưu hóa", step: 5 },
-    { title: "Bước 6: Hoàn thiện", step: 6 },
-  ];
+    // Render processing steps
+    const stepsContainer = document.getElementById("processing-steps");
 
-  steps.forEach((step) => {
-    const stepDiv = document.createElement("div");
-    stepDiv.className = "step-result";
+    const steps = [
+      { title: "Bước 1: Phân tích ảnh", step: 1 },
+      { title: "Bước 2: Loại bỏ nhiễu", step: 2 },
+      { title: "Bước 3: Tăng cường chi tiết", step: 3 },
+      { title: "Bước 4: Tô màu", step: 4 },
+      { title: "Bước 5: Tối ưu hóa", step: 5 },
+      { title: "Bước 6: Hoàn thiện", step: 6 },
+    ];
 
+    stepsContainer.innerHTML = ''; // Clear previous steps if any
+    steps.forEach((step) => {
+      const stepDiv = document.createElement("div");
+      stepDiv.className = "step-result";
       stepDiv.innerHTML = `
-                <h5>${step.title}</h5>
-                <img src="http://127.0.0.1:8000/files/${id}_${step.step}.png" alt="Step ${step.step} result" class="img-fluid">
-            `;
-    try{
+        <h5>${step.title}</h5>
+        <img src="http://127.0.0.1:8000/files/${id}_${step.step}.png" alt="Step ${step.step} result" class="img-fluid">
+      `;
       stepsContainer.appendChild(stepDiv);
-    }
-    catch (error) {
+    });
 
-    }
-  });
-
+  } else {
+    console.error("Upload failed");
+    status.textContent = "Upload failed. Please try again.";
+  }
 });
 
+// Download button event listener
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+  socket.send("download");
+  if (!id) {
+    alert("No ID found. Please upload a file first.");
+    return;
+  }
 
+  console.log("click! Downloading...");
+
+  // Call the download API with the ID in the URL query string
+  const downloadResponse = await fetch(`http://127.0.0.1:8000/file/download?id=${id}`, {
+    method: "GET", // Use GET for downloading
+  });
+
+  if (downloadResponse.ok) {
+    const blob = await downloadResponse.blob(); // Convert response to a Blob
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob); // Create a URL for the Blob
+    link.download = `${id}_final.zip`; // Set the download file name
+    link.click(); // Trigger the download
+  } else {
+    console.error("Download failed");
+    alert("Failed to download the file. Please try again.");
+  }
+});
