@@ -74,13 +74,20 @@ document.getElementById("runProcess").addEventListener("click", async () => {
 
   const fileInput = document.getElementById("fileInput");
   const status = document.getElementById("status");
+  const positivePrompt = document.getElementById("positivePrompt").value
+  const negativePrompt = document.getElementById("negativePrompt").value
 
   // Create FormData and append the file
   const formData = new FormData();
   formData.append("upload_file", fileInput.files[0]);
 
+  param = new URLSearchParams({
+    positive: positivePrompt,
+    negative: negativePrompt,
+  })
+
   // Call the FastAPI upload endpoint
-  const response = await fetch("http://127.0.0.1:8000/file/upload", {
+  const response = await fetch(`http://127.0.0.1:8000/file/upload?${param}`, {
     method: "POST",
     body: formData,
   });
